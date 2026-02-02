@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Anshika</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Poppins',sans-serif;
+}
+
+body{
+  background:black;
+  overflow:hidden;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  user-select:none;
+  position:relative;
+}
+
+/* animated background */
+.bg{
+  position:absolute;
+  width:100%;
+  height:100%;
+  background:linear-gradient(120deg,#000,#1a0026,#000,#001a1a);
+  background-size:400% 400%;
+  animation:bgMove 10s infinite linear;
+  z-index:0;
+}
+
+@keyframes bgMove{
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
+
+/* blur lights */
+.light{
+  position:absolute;
+  width:300px;
+  height:300px;
+  border-radius:50%;
+  filter:blur(80px);
+  opacity:0.6;
+  animation:move 8s infinite alternate;
+}
+.light.pink{background:#ff00ff; top:20%; left:10%;}
+.light.cyan{background:#00ffff; bottom:20%; right:10%;}
+
+@keyframes move{
+  0%{transform:translate(0,0);}
+  100%{transform:translate(200px,-200px);}
+}
+
+.container{
+  text-align:center;
+  z-index:1;  /* below NO button */
+  color:white;
+}
+
+/* name */
+.name{
+  font-size:70px;
+  font-weight:700;
+  letter-spacing:4px;
+  color:white;
+  text-shadow:0 0 15px #ff00ff,0 0 50px #00ffff;
+}
+
+/* question text */
+.question{
+  font-size:28px;
+  margin-top:20px;
+  color:#ff4d6d;
+  text-shadow:0 0 10px #ff4d6d;
+}
+
+/* buttons */
+.buttons{
+  margin-top:40px;
+  display:flex;
+  justify-content:center;
+  gap:40px;
+}
+
+#yesBtn{
+  padding:12px 30px;
+  font-size:20px;
+  border:none;
+  border-radius:30px;
+  background:#00ff99;
+  color:black;
+  cursor:pointer;
+  box-shadow:0 0 15px #00ff99;
+  position:relative;
+  z-index:1; /* below NO button */
+}
+
+#noBtn{
+  position:absolute;
+  padding:12px 30px;
+  font-size:20px;
+  border:none;
+  border-radius:30px;
+  background:red;
+  color:white;
+  cursor:pointer;
+  box-shadow:0 0 15px red;
+  z-index:9999; /* always on top */
+}
+</style>
+</head>
+<body>
+
+<div class="bg"></div>
+<div class="light pink"></div>
+<div class="light cyan"></div>
+
+<div class="container">
+  <div class="name">Anshika 💖</div>
+  <div class="question">Will you be my Valentine?</div>
+
+  <div class="buttons">
+    <button id="yesBtn">YES ❤️</button>
+  </div>
+</div>
+
+<button id="noBtn">NO ❌</button>
+
+<script>
+/* floating NO button */
+const noBtn = document.getElementById("noBtn");
+
+// Function to move NO button to a random location without overlapping text
+function moveButton(){
+  const btnWidth = noBtn.offsetWidth;
+  const btnHeight = noBtn.offsetHeight;
+  const padding = 20;
+
+  const container = document.querySelector('.container');
+  const containerRect = container.getBoundingClientRect();
+
+  let x, y;
+  let safe = false;
+
+  while(!safe){
+    x = Math.random() * (window.innerWidth - btnWidth - padding);
+    y = Math.random() * (window.innerHeight - btnHeight - padding);
+
+    // Check if NO button overlaps container (text & YES button)
+    if(
+      y + btnHeight < containerRect.top || y > containerRect.bottom ||
+      x + btnWidth < containerRect.left || x > containerRect.right
+    ){
+      safe = true;
+    }
+  }
+
+  noBtn.style.left = x + "px";
+  noBtn.style.top = y + "px";
+}
+
+// Initial position
+moveButton();
+
+// Move button when mouse or touch tries to click
+noBtn.addEventListener("mouseover", moveButton);
+noBtn.addEventListener("touchstart", moveButton);
+
+/* YES button action */
+document.getElementById("yesBtn").onclick = function(){
+  alert("Yay! She said YES ❤️");
+};
+</script>
+
+</body>
+</html>
